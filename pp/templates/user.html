@@ -60,9 +60,10 @@
 			},
 			success: function(data, status, xhr) {
                 $(".status").removeClass("darken-3");
+                var backnum = data.split(",").length;
 				console.log(data);
                 if (data.length > 0) {
-                    $(".status").html("Your bills have been created! <a target='_blank' href='/print/"+data+"'>  <i class='material-icons'>local_printshop</i></a>");
+                    $(".status").html("Your bills have been created! <a target='_blank' href='/print/"+data+"'>  Bills</a> <i class='material-icons'>local_printshop</i> <a target='_blank' href='/backs/"+backnum+"'>Backs</a>");
                 }
 			}
 		});

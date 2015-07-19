@@ -34,6 +34,10 @@ def user_dashboard():
 def create_redemption_url(bill_token):
     return "http://paypyrus.rcket.science/redeem/{}".format(bill_token)
 
+@app.route("/backs/<num>/")
+def backs(num):
+    num = int(num)
+    return render_template("backs.html", num=xrange(0, num))
 
 @app.route("/api/v1/get_bill", methods=["POST", "GET"])
 def api_v1_get_picture():
