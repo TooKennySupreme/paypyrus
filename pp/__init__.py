@@ -190,9 +190,9 @@ def create_bill(username, denomination, quantity, time):
 def timectime(s):
     return format(datetime.fromtimestamp(s), '%m/%d/%Y  %H:%M:%S')
 
-@app.errorhandler(Exception)
-def handle_exceptions(error):
-   return render_template("error.html"), 500
+#@app.errorhandler(Exception)
+#def handle_exceptions(error):
+#   return render_template("error.html"), 500
 
 @app.template_filter('format_time')
 def format_time(n):
