@@ -29,8 +29,8 @@ def user_dashboard():
 
 @app.route("/oauth/")
 def oauth():
-    error = request.args.get('key', '')
-    auth_code = request.args.get('key', '')
+    error = request.args.get('error', '')
+    auth_code = request.args.get('access_token', '')
     if error != '':
         return render_template("error.html",
                                 error="Sorry. It seems like something went wrong while authenticating your account. Try again later.")
@@ -38,10 +38,22 @@ def oauth():
         session["auth_code"] = auth_code
 
     # get username, email, etc
-    user_info = vapi.get_user_data(auth_code)
+    try:
+        user_info = vapi.get_user_data(auth_code)
+    except ValueError:
+        return render_template("error.html", error="Unable to validate your account. Please try <a href='/logout'>logging out</a> and trying again.")
+
+
     session["username"] = user_info["user"]["username"]
     session["name"] = user_info["user"]["first_name"] + " " + user_info["user"]["last_name"]
     return redirect(url_for("user_dashboard"))
+
+@app.route("/logout/")
+def logout():
+    session.pop("auth_code", '')
+    session.pop("username", '')
+    session.pop("name", '')
+    return redirect(url_for("index"))
 
 
 if __name__ == '__main__':

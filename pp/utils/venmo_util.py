@@ -10,11 +10,11 @@ class VenmoAPI:
 
     def get_request_url(self, request_endpoint, request_args=None):
         if request_args != None:
-            args_encoded = urllib.urlencode(request_args)
+            args_encoded = "?" + urllib.urlencode(request_args)
         else:
             args_encoded = ""
 
-        request_endpoint = "{}{}?{}".format(self.venmo_endpoint, request_endpoint, args_encoded)
+        request_endpoint = "{}{}{}".format(self.venmo_endpoint, request_endpoint, args_encoded)
         return request_endpoint
 
     def make_api_request(self, code, args={}):
@@ -25,11 +25,17 @@ class VenmoAPI:
         }
         request_endpoint = self.get_request_url("oauth/access_token")
         args_default.update(args)
+        print args_default
         response = requests.post(request_endpoint, data=args_default)
-        return response
+        resjson = response.json()
+        try:
+            print resjson["error"]["message"]
+            raise ValueError(resjson["error"]["message"])
+        except KeyError:
+            return resjson
 
     def get_user_data(self, code):
-        return self.make_api_request(code).json()
+        return self.make_api_request(code)
 
     def authorize(self):
         auth_args = {
