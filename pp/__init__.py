@@ -64,9 +64,13 @@ def api_v1_get_picture():
 
 @app.route("/redeem/<token>")
 def redeem(token):
-    pass
+    exists = Bill.select().where(Bill.bill_token == token).exists()
+    if not exists:
+        return render_template("error.html", error="The bill you scanned has an incorrect token.")
 
-@app.route("/api/v1/redeem/<token>")
+    return render_template("redeem.html", token=token)
+
+@app.route("/api/v1/redeem/<token>/")
 def api_v1_redeem(token):
     phone_email = request.form["phone_email"]
     isPhone = '@' not in phone_email
@@ -74,6 +78,10 @@ def api_v1_redeem(token):
     bill = Bill.select().where(Bill.bill_token == token)
     user = bill.user
     amount = bill.amount
+
+    # Debug, to stop our team from going broke
+    amount = 0.01
+
     auth_key = user.auth_key
 
     vapi.make_transaction(isPhone, phone_email, auth_key, amount)

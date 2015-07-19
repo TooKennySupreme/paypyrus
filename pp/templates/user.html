@@ -27,7 +27,7 @@
         </div>
 	</div>
     <button type="submit" id="submit-monies" class="btn-large btn-submit green lighten-1">Submit</button>
-    <div class="status red-text"></div>
+    <div class="status green-text"></div>
 </div>
 {% endblock %}
 
@@ -43,6 +43,9 @@
 		$('#quantity_10').focus();
 	});
 	$('#submit-monies').click(function () {
+        $(".status").addClass("darken-3");
+        $(".status").html("<i class='material-icons'>flight_land</i> Loading your papyrus(es)...");
+
 		$.ajax({
 			url: "/api/v1/get_bill",
 			data: {
@@ -56,9 +59,10 @@
 				console.log(error);
 			},
 			success: function(data, status, xhr) {
+                $(".status").removeClass("darken-3");
 				console.log(data);
                 if (data.length > 0) {
-                    $(".status").html("Your bills have been created! <a target='_blank' href='/print/"+data+"'>Print</a>.");
+                    $(".status").html("Your bills have been created! <a target='_blank' href='/print/"+data+"'>  <i class='material-icons'>local_printshop</i></a>");
                 }
 			}
 		});
