@@ -6,6 +6,7 @@
   <image height="35px" width="35px" x="300" xlink:href="paysign1.svg" y="0" />
   <image height="35px" width="35px" x="300" xlink:href="paysign1.svg" y="200" />
   <image height="300px" width="300px" x="55" xlink:href="paypyrus-sign.svg" y="5"/>
-  <text x="30" y="120">To cash the paypyrus, scan the QR code</text>
-  <text x="30" y="135">on the front and enter your Venmo ID</text>
+  <text x="25" y="120">To cash the paypyrus, scan the QR code</text>
+  <text x="25" y="135">on the front &amp; enter your email or phone number.</text>
+  <text x="25" y="155">QR Reader? http://paypyrus.cydrobolt.com/scan</text>
 </svg>
