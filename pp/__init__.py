@@ -26,7 +26,7 @@ def venmo_auth():
 def user_dashboard():
     # User dashboard, must be logged in
     if session["username"]:
-        return render_template("user.html")
+        return render_template("user.html", full_name=session["name"])
     else:
         return redirect(url_for("login"))
 
@@ -41,16 +41,24 @@ def api_v1_get_picture():
 
     current_time = int(time.time())
     for denomination in quantities:
-        try:
-            quantity = int(quantities[denomination])
-            create_bill(username, denomination, quantity, current_time)
-        except:
-            return "Invalid quantities"
+        # try:
+        quantity = int(quantities[denomination])
+        create_bill(username, denomination, quantity, current_time)
+        # except:
+        #     return "Invalid quantities"
     return "OK"
 
-@app.route("/api/v1/redeem")
-def api_v1_redeem():
-    pass
+@app.route("/api/v1/redeem/<token>")
+def api_v1_redeem(token):
+    phone_email = request.form["phone_email"]
+    isPhone = '@' not in phone_email
+
+    bill = Bill.select().where(Bill.bill_token == token)
+    user = bill.user
+    amount = bill.amount
+    auth_key = user.auth_key
+
+    vapi.make_transaction(isPhone, phone_email, auth_key, amount)
 
 @app.route("/oauth/")
 def oauth():
@@ -100,13 +108,13 @@ def create_user(username, auth_key, email):
 def create_bill(username, denomination, quantity, time):
     user = User.select().where(User.username == username)
     for i in range(quantity):
-        bill_token = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(25))
+        bill_token = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(100))
         Bill.create(
             user = user,
             creator = username,
-            amount = denomination, 
+            amount = denomination,
             time = time,
-            bill_token = bill_token,
+            bill_token = bill_token
         )
 
 # @app.errorhandler(Exception)

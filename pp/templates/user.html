@@ -2,7 +2,7 @@
 {% set thispage='login' %}
 {% block content %}
 <div class="user-page">
-    <h1>Hi {{ session["name"] }},</h1>
+    <h1>Hi {{ full_name }},</h1>
 	<div class="row">
 		<div class="btn-col">
 			<a class="btn-large btn-monies green" id="btn-qty-1">$1</a>
@@ -11,7 +11,7 @@
 		</div>
 	</div>
 	<div class="row">
-		<div class="btn-col">	
+		<div class="btn-col">
 			<div class="input-field col s4">
 	          <input id="quantity_1" type="number" class="validate">
 	          <label for="quantity_1">quantity</label>
@@ -27,6 +27,7 @@
         </div>
     </div>
     <button type="submit" id="submit-monies" class="btn-large btn-submit green lighten-1">Submit</button>
+    <div class="status red-text"></div>
 </div>
 {% endblock %}
 
@@ -56,6 +57,9 @@
 			},
 			success: function(data, status, xhr) {
 				console.log(data);
+                if (data.length > 0) {
+                    $(".status").html("Your bills have been created! <a href='/print/"+data+"'>Print</a>.");
+                }
 			}
 		});
 	});
