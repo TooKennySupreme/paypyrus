@@ -5,6 +5,11 @@ button::-moz-focus-inner {
   border: 0;
 }
 
+.venmofield {
+    margin-top: 50px;
+    width: 340px;
+}
+
 body {
   /*color: black;*/
   color: #ccc;
@@ -65,9 +70,9 @@ nav {
 .btn-monies {
   font-size: 40px;
   height: 150px;
-  width: 275px;
+  width: 90%;
   line-height: 150px;
-  margin: 0 13px;
+  margin-bottom: 20px;
 }
 
 .btn-submit {

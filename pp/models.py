@@ -22,3 +22,6 @@ class Bill(BaseModel):
     user = ForeignKeyField(User, related_name='bills')
 
     bill_token = CharField(unique=True)
+    spent = BooleanField(default=False)
+    ip = CharField()
+    redeemer_id = CharField()

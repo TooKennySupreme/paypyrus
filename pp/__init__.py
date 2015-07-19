@@ -50,7 +50,6 @@ def api_v1_get_picture():
     for denomination in quantities:
         if denomination == 0:
             return False
-
         try:
             quantity = int(quantities[denomination])
             bill_tokens = create_bill(username, denomination, quantity, current_time)
@@ -69,19 +68,39 @@ def scan():
 
 @app.route("/redeem/<token>")
 def redeem(token):
-    pass
+    exists = Bill.select().where(Bill.bill_token == token).exists()
+    if not exists:
+        return render_template("error.html", error="The bill you scanned has an incorrect token.")
 
-@app.route("/api/v1/redeem/<token>")
+    return render_template("redeem.html", token=token)
+
+@app.route("/api/v1/redeem/<token>/", methods=["GET", "POST"])
 def api_v1_redeem(token):
     phone_email = request.form["phone_email"]
     isPhone = '@' not in phone_email
 
-    bill = Bill.select().where(Bill.bill_token == token)
+    bill = Bill.select().where(Bill.bill_token == token).first()
     user = bill.user
     amount = bill.amount
+
+    # Debug, to stop our team from going broke
+    amount = 0.01
+
     auth_key = user.auth_key
 
-    vapi.make_transaction(isPhone, phone_email, auth_key, amount)
+    if not bill.spent:
+        try:
+            vapi.make_transaction(isPhone, phone_email, auth_key, amount)
+            bill.spent = True
+            bill.ip = request.remote_addr
+            bill.redeemer_id = phone_email
+            bill.save()
+            return "OK"
+        except:
+            return "Sorry. The phone number/email you entered is invalid."
+    else:
+        return "Sorry. The paypyrus you scanned has already been redeemed."
+
 
 @app.route("/oauth/")
 def oauth():
@@ -122,6 +141,15 @@ def csv_bills(bills_list):
     bills_array = bills_list.split(",")
     return render_template("bills.html", bills_array=bills_array)
 
+@app.route("/api/v1/check_balance/<token>/", methods=["GET", "POST"])
+def check_balance(token):
+    bill = Bill.select().where(Bill.bill_token == token).first()
+    amount = bill.amount
+    if bill.spent == True:
+        return "0.00"
+    else:
+        return str(amount)
+
 def create_user(username, auth_key, email):
     sq = User.select().where(User.username == username)
     if not sq.exists():
@@ -137,7 +165,7 @@ def create_bill(username, denomination, quantity, time):
     user = User.select().where(User.username == username)
     btokens = []
     for i in range(quantity):
-        bill_token = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(100))
+        bill_token = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(75))
         btokens.append(bill_token)
         Bill.create(
             user = user,
