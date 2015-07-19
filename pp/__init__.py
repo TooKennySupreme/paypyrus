@@ -30,7 +30,7 @@ def user_dashboard():
 @app.route("/oauth/")
 def oauth():
     error = request.args.get('error', '')
-    auth_code = request.args.get('access_token', '')
+    auth_code = request.args.get('code', '')
     if error != '':
         return render_template("error.html",
                                 error="Sorry. It seems like something went wrong while authenticating your account. Try again later.")
