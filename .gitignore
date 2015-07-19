@@ -5,6 +5,7 @@ qr-*.svg
 final-*.svg
 # C extensions
 *.so
+.idea
 
 # Distribution / packaging
 .Python
