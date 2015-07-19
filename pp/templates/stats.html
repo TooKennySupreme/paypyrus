@@ -1,0 +1,26 @@
+{% extends 'navbar.html' %}
+{% set thispage='login' %}
+{% block content %}
+<div class="user-page">
+    <h1 style="margin-bottom: 75px;">Hi {{ full_name }},</h1>
+	<table id="bill-table">
+        <thead>
+          <tr>
+              <th data-field="amount">Amount</th>
+              <th data-field="time">Time Created</th>
+              <th data-field="redeemed">Redeemed</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for bill in bills %}			
+          <tr>
+            <td>{{ bill.amount }}</td>
+            <td>{{ bill.time }}</td>
+            <td>{{ bill.spent }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+</div>
+{% endblock %}
