@@ -75,7 +75,7 @@ def api_v1_redeem(token):
     phone_email = request.form["phone_email"]
     isPhone = '@' not in phone_email
 
-    bill = Bill.select().where(Bill.bill_token == token)
+    bill = Bill.select().where(Bill.bill_token == token).first()
     user = bill.user
     amount = bill.amount
 
@@ -85,6 +85,7 @@ def api_v1_redeem(token):
     auth_key = user.auth_key
 
     vapi.make_transaction(isPhone, phone_email, auth_key, amount)
+    return "OK"
 
 @app.route("/oauth/")
 def oauth():
@@ -127,7 +128,7 @@ def csv_bills(bills_list):
 
 @app.route("/api/v1/check_balance/<token>/")
 def check_balance(token):
-    bill = Bill.select().where(Bill.bill_token == token)
+    bill = Bill.select().where(Bill.bill_token == token).first()
     amount = bill.amount
     return amount
 

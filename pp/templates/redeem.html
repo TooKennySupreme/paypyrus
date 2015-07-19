@@ -6,7 +6,7 @@
     <p>Token ID {{ token | e }}</p>
     <div class="input-field venmofield">
         <input type="text" id="venmo-acct" class="form" />
-        <label for="venmo-acct">Venmo username or phone number</label>
+        <label for="venmo-acct">Venmo email or phone number</label>
     </div>
     <a href="#" id="redeem-money" class="btn green">Redeem</a>
     <a href="#" id="check-balance" class="btn blue">Check Balance</a>
@@ -24,7 +24,7 @@ $(function () {
         $(".status").html("<i class='material-icons'>flight_land</i> Redeeming...");
 
 		$.ajax({
-            url: "/api/v1/redeem/{{ token | e }}",
+            url: "/api/v1/redeem/{{ token | e }}/",
 			data: {
 				phone_email: $('#venmo-acct').val()
 			},
@@ -47,7 +47,7 @@ $(function () {
         $(".status").html("<i class='material-icons'>flight_land</i> Checking your balance...");
 
 		$.ajax({
-			url: "/api/v1/check_balance/{{ token | e }}",
+			url: "/api/v1/check_balance/{{ token | e }}/",
 			method: 'POST',
 			error: function(xhr, status, error) {
 				console.log(xhr);
