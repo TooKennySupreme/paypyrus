@@ -34,6 +34,23 @@ class VenmoAPI:
         except KeyError:
             return resjson
 
+    def make_transaction(self, isPhone, phone_email, access_token, amount):
+        parameters = {
+            "access_token": access_token,
+            "note": "Your $" + str(amount) + " paypyrus has been redeemed.",
+            "amount": amount
+        }
+        identifier = 'phone' if isPhone else 'email'
+        parameters[identifier] = phone_email
+        request_endpoint = self.get_request_url("payments")
+        response = requests.post(request_endpoint, data=parameters)
+        resjson = response.json()
+        try:
+            print resjson["error"]["message"]
+            raise ValueError(resjson["error"]["message"])
+        except KeyError:
+            return resjson
+
     def get_user_data(self, code):
         return self.make_api_request(code)
 

@@ -67,9 +67,17 @@ def api_v1_get_picture():
 def redeem(token):
     pass
 
-@app.route("/api/v1/redeem")
-def api_v1_redeem():
-    pass
+@app.route("/api/v1/redeem/<token>")
+def api_v1_redeem(token):
+    phone_email = request.form["phone_email"]
+    isPhone = '@' not in phone_email
+
+    bill = Bill.select().where(Bill.bill_token == token)
+    user = bill.user
+    amount = bill.amount
+    auth_key = user.auth_key
+
+    vapi.make_transaction(isPhone, phone_email, auth_key, amount)
 
 @app.route("/oauth/")
 def oauth():
