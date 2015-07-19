@@ -1,4 +1,4 @@
-import time 
+import time
 from . import config
 from utils.venmo_util import VenmoAPI
 from flask import Flask
@@ -37,14 +37,16 @@ def api_v1_get_picture():
     if amount > 10:
         return "Currently, papyrus only supports amounts under $10. Sorry for the inconvenience."
     bill_token = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(N))
-   
+
    # process payment
     time = int(time.time())
     create_bill(username, amount, time, bill_token)
-    
+
     return "OK"
 
 @app.route("/api/v1/redeem")
+def api_v1_redeem():
+    pass
 
 @app.route("/oauth/")
 def oauth():
@@ -96,7 +98,7 @@ def create_bill(username, amount, time, bill_token):
     Bill.create(
         user = user,
         creator = username,
-        amount = amount, 
+        amount = amount,
         time = time,
         bill_token = bill_token,
     )
