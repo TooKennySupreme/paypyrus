@@ -34,9 +34,9 @@ def qrfilegen(link):
 def svgfilename(link):
     svg_document = svgwrite.Drawing(filename = "qrcodegen.svg", size = ("400px", "400px"))
     svg_document.add(svg_document.image("paysign1.svg", insert = (0,0), size = ("35px", "35px")))
-    svg_document.add(svg_document.image("paysign1.svg", insert = (0,200), size = ("35px", "35px")))
-    svg_document.add(svg_document.image("paysign1.svg", insert = (300,0), size = ("35px", "35px")))
-    svg_document.add(svg_document.image("paysign1.svg", insert = (300,200), size = ("35px", "35px")))
+    svg_document.add(svg_document.image("paysign1.svg", insert = (0,300), size = ("35px", "35px")))
+    svg_document.add(svg_document.image("paysign1.svg", insert = (400,0), size = ("35px", "35px")))
+    svg_document.add(svg_document.image("paysign1.svg", insert = (400,300), size = ("35px", "35px")))
     svg_document.add(svg_document.image("paypyrus-sign.svg", insert = (55,5), size = ("300px", "300px")))
     qrstr = qrfilegen(link)
     svg_document.add(svg_document.image(qrstr, insert=(80, 40), size=("175px", "175px")))
