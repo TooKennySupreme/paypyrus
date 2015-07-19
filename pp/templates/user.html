@@ -2,12 +2,12 @@
 {% set thispage='login' %}
 {% block content %}
 <div class="user-page">
-    <h1>Hi Amy Shu,</h1>
+    <h1>Hi {{ session["name"] }},</h1>
 	<div class="row">
 		<div class="btn-col">
-			<a class="btn-large btn-monies grey" id="btn-qty-1">$1</a>
-			<a class="btn-large btn-monies grey" id="btn-qty-5">$5</a>
-			<a class="btn-large btn-monies grey" id="btn-qty-10">$10</a>
+			<a class="btn-large btn-monies green" id="btn-qty-1">$1</a>
+			<a class="btn-large btn-monies green" id="btn-qty-5">$5</a>
+			<a class="btn-large btn-monies green" id="btn-qty-10">$10</a>
 		</div>
 	</div>
 	<div class="row">

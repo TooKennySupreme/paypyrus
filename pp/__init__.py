@@ -100,7 +100,7 @@ def create_user(username, auth_key, email):
 def create_bill(username, denomination, quantity, time):
     user = User.select().where(User.username == username)
     for i in range(quantity):
-        bill_token = bill_token = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(25))
+        bill_token = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(25))
         Bill.create(
             user = user,
             creator = username,
