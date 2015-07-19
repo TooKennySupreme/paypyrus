@@ -1,3 +1,4 @@
+import time 
 from . import config
 from utils.venmo_util import VenmoAPI
 from flask import Flask
@@ -34,6 +35,8 @@ def api_v1_get_picture():
     if amount > 10:
         return "Currently, papyrus only supports amounts under $10. Sorry for the inconvenience."
     # process payment
+    time = int(time.time())
+    create_bill(username, amount, time)
 
 @app.route("/oauth/")
 def oauth():
@@ -72,13 +75,22 @@ def logout():
 def create_user(username, auth_key, email):
     sq = User.select().where(User.username == username)
     if not sq.exists():  
-        user = User.create(
+        User.create(
             username = username,
             auth_key = auth_key,
             email = email
         )
         print "User created"
     print "User already exists"
+
+def create_bill(username, amount, time):
+    user = User.select.where(User.username == username)
+    Bill.create(
+        user = user,
+        creator = username,
+        amount = amount, 
+        time = time,
+    )
 
 @app.errorhandler(Exception)
 def handle_exceptions(error):

@@ -7,8 +7,8 @@ class BaseModel(Model):
         database = db
 
 class User(BaseModel):
-    username = CharField()
-    auth_key = CharField()
+    username = CharField(unique=True)
+    auth_key = CharField(unique=True)
     email = CharField(default=None)
 
 class Bill(BaseModel):
