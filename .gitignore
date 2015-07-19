@@ -1,7 +1,8 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
-*.svg
+qr-*.svg
+final-*.svg
 # C extensions
 *.so
 
