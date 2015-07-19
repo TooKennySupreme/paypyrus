@@ -84,7 +84,20 @@ def api_v1_redeem(token):
 
     auth_key = user.auth_key
 
-    vapi.make_transaction(isPhone, phone_email, auth_key, amount)
+    if not bill.spent:
+        try:
+            vapi.make_transaction(isPhone, phone_email, auth_key, amount)
+            bill.spent = True
+            bill.ip = request.remote_addr
+            bill.redeemer_id = phone_email
+            bill.save()
+        except:
+            return render_template("error.html",
+                                    error="Sorry. The phone number/email you entered is invalid.")
+    else:
+        return render_template("error.html",
+                                    error="Sorry. The paypyrus you scanned has already been redeemed.")
+     
 
 @app.route("/oauth/")
 def oauth():
