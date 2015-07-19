@@ -50,7 +50,6 @@ def api_v1_get_picture():
     for denomination in quantities:
         if denomination == 0:
             return False
-
         try:
             quantity = int(quantities[denomination])
             bill_tokens = create_bill(username, denomination, quantity, current_time)
