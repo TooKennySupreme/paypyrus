@@ -6,7 +6,7 @@ from utils import qrcode
 from flask import Flask
 from flask import url_for, render_template, redirect, session, request
 from models import *
-import string, random, mimetype
+import string, random, mimetypes
 
 mimetypes.add_type('image/svg+xml', '.svg')
 
