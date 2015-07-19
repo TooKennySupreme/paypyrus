@@ -1,5 +1,6 @@
 import time
 from . import config
+from datetime import datetime
 from utils.venmo_util import VenmoAPI
 from utils import qrcode
 from flask import Flask
@@ -182,7 +183,9 @@ def create_bill(username, denomination, quantity, time):
         )
     return btokens
 
-
+@app.template_filter('ctime')
+def timectime(s):
+    return format(datetime.fromtimestamp(s), '%m/%d/%Y  %H:%M:%S')
 
 # @app.errorhandler(Exception)
 # def handle_exceptions(error):
