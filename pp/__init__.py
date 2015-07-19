@@ -1,6 +1,7 @@
 import time
 from . import config
 from utils.venmo_util import VenmoAPI
+from utils import qrcode
 from flask import Flask
 from flask import url_for, render_template, redirect, session, request
 from models import *
@@ -30,6 +31,10 @@ def user_dashboard():
     else:
         return redirect(url_for("login"))
 
+def create_redemption_url(bill_token):
+    return "http://paypyrus.rcket.science/redeem/{}".format(bill_token)
+
+
 @app.route("/api/v1/get_bill", methods=["POST", "GET"])
 def api_v1_get_picture():
     quantities = {
@@ -40,13 +45,27 @@ def api_v1_get_picture():
     username = session["username"]
 
     current_time = int(time.time())
+    bill_tokens = []
+    urls = []
     for denomination in quantities:
-        # try:
-        quantity = int(quantities[denomination])
-        create_bill(username, denomination, quantity, current_time)
-        # except:
-        #     return "Invalid quantities"
-    return "OK"
+        if denomination == 0:
+            return False
+
+        try:
+            quantity = int(quantities[denomination])
+            bill_tokens = create_bill(username, denomination, quantity, current_time)
+            for bt in bill_tokens:
+                urls.append(create_redemption_url(bt))
+        except:
+            return "Invalid quantities"
+
+    print urls
+    qr_urls = [qrcode.svgfilename(url) for url in urls]
+    return ",".join(qr_urls)
+
+@app.route("/redeem/<token>")
+def redeem(token):
+    pass
 
 @app.route("/api/v1/redeem/<token>")
 def api_v1_redeem(token):
@@ -94,6 +113,11 @@ def logout():
     session.pop("name", '')
     return redirect(url_for("index"))
 
+@app.route("/print/<bills_list>")
+def csv_bills(bills_list):
+    bills_array = bills_list.split(",")
+    return render_template("bills.html", bills_array=bills_array)
+
 def create_user(username, auth_key, email):
     sq = User.select().where(User.username == username)
     if not sq.exists():
@@ -107,8 +131,10 @@ def create_user(username, auth_key, email):
 
 def create_bill(username, denomination, quantity, time):
     user = User.select().where(User.username == username)
+    btokens = []
     for i in range(quantity):
         bill_token = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(100))
+        btokens.append(bill_token)
         Bill.create(
             user = user,
             creator = username,
@@ -116,6 +142,9 @@ def create_bill(username, denomination, quantity, time):
             time = time,
             bill_token = bill_token
         )
+    return btokens
+
+
 
 # @app.errorhandler(Exception)
 # def handle_exceptions(error):
