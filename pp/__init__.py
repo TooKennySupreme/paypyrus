@@ -36,33 +36,30 @@ def create_redemption_url(bill_token):
 
 @app.route("/stats/")
 def stats():
-    return render_template("stats.html")
+    bills = Bill.select().where(Bill.creator == session["username"])
+    return render_template("stats.html", full_name=session["name"], bills=bills)
 
 @app.route("/api/v1/get_bill", methods=["POST", "GET"])
 def api_v1_get_picture():
     quantities = {
         0.01: request.form["quantity_1"] or 0,
-        5: request.form["quantity_5"] or 0,
-        10: request.form["quantity_10"] or 0
+        1: request.form["quantity_5"] or 0,
+        2: request.form["quantity_10"] or 0
     }
     username = session["username"]
 
     current_time = int(time.time())
     bill_tokens = []
     urls = []
+
     for denomination in quantities:
-        print denomination
         if denomination == 0:
             return False
-        try:
-            quantity = int(quantities[denomination])
-            print quantity
-            bill_tokens = create_bill(username, denomination, quantity, current_time)
-            for bt in bill_tokens:
-                urls.append(create_redemption_url(bt))
-        except:
-            return "Invalid quantities"
-
+        quantity = int(quantities[denomination])
+        bill_tokens = create_bill(username, denomination, quantity, current_time)
+        for bt in bill_tokens:
+            urls.append(create_redemption_url(bt))
+   
     print urls
     qr_urls = [qrcode.svgfilename(url) for url in urls]
     return ",".join(qr_urls)
@@ -80,12 +77,9 @@ def api_v1_redeem(token):
     phone_email = request.form["phone_email"]
     isPhone = '@' not in phone_email
 
-    bill = Bill.select().where(Bill.bill_token == token)
+    bill = Bill.select().where(Bill.bill_token == token).first()
     user = bill.user
     amount = bill.amount
-
-    # Debug, to stop our team from going broke
-    amount = 0.01
 
     auth_key = user.auth_key
 
@@ -96,13 +90,12 @@ def api_v1_redeem(token):
             bill.ip = request.remote_addr
             bill.redeemer_id = phone_email
             bill.save()
+            return "OK"
         except:
-            return render_template("error.html",
-                                    error="Sorry. The phone number/email you entered is invalid.")
+            return "Sorry. The phone number/email you entered is invalid."
     else:
-        return render_template("error.html",
-                                    error="Sorry. The paypyrus you scanned has already been redeemed.")
-     
+        return "Sorry. The paypyrus you scanned has already been redeemed."
+
 @app.route("/oauth/")
 def oauth():
     error = request.args.get('error', '')
@@ -142,11 +135,14 @@ def csv_bills(bills_list):
     bills_array = bills_list.split(",")
     return render_template("bills.html", bills_array=bills_array)
 
-@app.route("/api/v1/check_balance/<token>/")
+@app.route("/api/v1/check_balance/<token>/", methods=["GET", "POST"])
 def check_balance(token):
-    bill = Bill.select().where(Bill.bill_token == token)
+    bill = Bill.select().where(Bill.bill_token == token).first()
     amount = bill.amount
-    return amount
+    if bill.spent == True:
+        return "0.00"
+    else:
+        return str(amount)
 
 def create_user(username, auth_key, email):
     sq = User.select().where(User.username == username)
@@ -160,6 +156,8 @@ def create_user(username, auth_key, email):
     print "User already exists"
 
 def create_bill(username, denomination, quantity, time):
+    print denomination
+    print quantity
     user = User.select().where(User.username == username)
     btokens = []
     for i in range(quantity):

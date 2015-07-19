@@ -108,6 +108,10 @@ nav {
   background: rgba(061, 149, 206, .7);
 }
 
+#bill-table {
+  color: #333;
+}
+
 video#bgvid {
   position: fixed;
   top: 50%;

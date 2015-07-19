@@ -23,5 +23,5 @@ class Bill(BaseModel):
 
     bill_token = CharField(unique=True)
     spent = BooleanField(default=False)
-    ip = CharField()
-    redeemer_id = CharField()
+    ip = CharField(default="127.0.0.1")
+    redeemer_id = CharField(default="money")

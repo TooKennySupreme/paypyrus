@@ -3,31 +3,23 @@
 {% block content %}
 <div class="user-page">
     <h1 style="margin-bottom: 75px;">Hi {{ full_name }},</h1>
-	<table>
+	<table id="bill-table">
         <thead>
           <tr>
-              <th data-field="id">Name</th>
-              <th data-field="name">Item Name</th>
-              <th data-field="price">Item Price</th>
+              <th data-field="amount">Amount</th>
+              <th data-field="time">Time Created</th>
+              <th data-field="redeemed">Redeemed</th>
           </tr>
         </thead>
 
         <tbody>
+          {% for bill in bills %}			
           <tr>
-            <td>Alvin</td>
-            <td>Eclair</td>
-            <td>$0.87</td>
+            <td>{{ bill.amount }}</td>
+            <td>{{ bill.time }}</td>
+            <td>{{ bill.spent }}</td>
           </tr>
-          <tr>
-            <td>Alan</td>
-            <td>Jellybean</td>
-            <td>$3.76</td>
-          </tr>
-          <tr>
-            <td>Jonathan</td>
-            <td>Lollipop</td>
-            <td>$7.00</td>
-          </tr>
+          {% endfor %}
         </tbody>
       </table>
 </div>
