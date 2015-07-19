@@ -1,4 +1,53 @@
 @import url(http://fonts.googleapis.com/css?family=Nixie+One);
+@import url(http://fonts.googleapis.com/css?family=Roboto+Condensed);
+
+body {
+  color: #ccc;
+  font-family: 'Nixie One', sans-serif;
+  font-weight: bold;
+}
+
+nav {
+  height: 70px;
+  line-height: 70px;
+  box-shadow: #fff 1px 0px 2px;
+}
+
+.brand-title {
+  font-size: 40px;
+  font-family: 'Nixie One', cursive;
+  font-weight: normal;
+  line-height: 60px;  /* Centers the text */
+}
+
+.brand-name-header {
+  font-size: 88px;
+  font-style: normal;
+}
+
+.panel {
+  height: auto;
+  min-height: 100%;
+  padding: 0 16%;
+}
+
+.splash-panel {
+  min-height: 100%;
+  text-align: center;
+}
+.splash-panel h1 {
+  font-style: italic;
+  margin-top: 144px;
+  margin-bottom: 44px;
+}
+.splash-panel h4 {
+  margin-bottom: 44px;
+}
+.splash-panel .btn {
+  font-size: 18px;
+  height: 55px;
+  line-height: 55px;
+}
 
 .centered {
   position: fixed;
@@ -8,29 +57,56 @@
   transform: translate(-50%, -50%);
 }
 .venmo-logo-img {
-    height: auto;
-    width: 60px;
-}
-
-.brand-title {
-    font-size: 40px;
-    font-family: 'Nixie One', cursive;
+  height: auto;
+  width: 60px;
 }
 
 .venmo-btn {
-    display: inline;
-    background: #3D95CE;
-    /* background: rgba(061, 149, 206, 0.9); */
-    font-size: 14px;
-    font-weight: bold;
-    text-transform: uppercase;
-    padding: 8px 16px;
-    color: #fff;
-    border: none;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
-    font-size: 14px;
-    line-height: 14px;
-    opacity: .9;
+  display: inline;
+  background: #3D95CE;
+  /* background: rgba(061, 149, 206, 0.9); */
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+  padding: 8px 16px;
+  color: #fff;
+  border: none;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  font-size: 14px;
+  line-height: 14px;
+  opacity: .9;
+}
+
+
+
+video#bgvid {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  z-index: -100;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+  background: url(/static/img/grandcentral.jpg) no-repeat;
+  background-size: cover;
+}
+
+.video-blur {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  z-index: -100;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+  background: #000;
+  opacity: .72;
 }

@@ -58,3 +58,6 @@ target/
 
 # Virtual environment
 venv/
+
+# Original video files
+*grandcentral480p.*

@@ -1,14 +1,23 @@
 {% extends 'navbar.html' %}
 {% block content %}
-<h1>Welcome to paypyrus</h1>
-<h4>EBT, reimagined.</h4>
-<p class="grey-text">paypyrus has the capability of parsing your speech and generating valuable factoid statistics based on environmental factors and transcribed logs.
-It also provides a search function, allowing users to sift through their past thoughts with ease. </p>
-<br />
-{% if not session["username"] %}
-    <div class="row"><a class="btn blue lighten-1 col s8 offset-s2" href="/login">Get Started</a></div>
-{% else %}
-    <div class="row"><a class="btn orange darken-1 col s8 offset-s2" href="/user">Go to your Dashboard</a></div>
-{% endif %}
+
+<video autoplay loop poster="/static/img/grandcentral.jpg" id="bgvid">
+    <source src="/static/img/grandcentral.webm" type="video/webm">
+    <source src="/static/img/grandcentral.mp4" type="video/mp4">
+</video>
+<div class="video-blur"></div>
+
+<div class="panel splash-panel transparent">
+    <h1>Welcome to<br><span class="brand-name-header green-text text-lighten-1">paypyrus</span></h1>
+    <h4>EBT, reimagined.</h4>
+    <!-- <p class="grey-text text-lighten-2">paypyrus has the capability of parsing your speech and generating valuable factoid statistics based on environmental factors and transcribed logs.
+    It also provides a search function, allowing users to sift through their past thoughts with ease. </p> -->
+    <br />
+    {% if not session["username"] %}
+        <div class="row"><a class="btn green darken-3 col s6 offset-s3" href="/login">Get Started</a></div>
+    {% else %}
+        <div class="row"><a class="btn orange darken-1 col s8 offset-s2" href="/user">Go to your Dashboard</a></div>
+    {% endif %}
+</div>
 
 {% endblock %}
