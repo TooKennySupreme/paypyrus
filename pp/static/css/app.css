@@ -6,8 +6,8 @@ button::-moz-focus-inner {
 }
 
 body {
-  color: black;
-  /*color: #ccc;*/
+  /*color: black;*/
+  color: #ccc;
   font-family: 'Nixie One', sans-serif;
   font-weight: bold;
 }
