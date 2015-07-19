@@ -2,6 +2,7 @@ from . import config
 from utils.venmo_util import VenmoAPI
 from flask import Flask
 from flask import url_for, render_template, redirect, session, request
+from models import *
 
 app = Flask('pp')
 app.secret_key = config.secret_key
@@ -54,8 +55,8 @@ def oauth():
     username = user_info["user"]["username"]
     name = user_info["user"]["first_name"] + " " + user_info["user"]["last_name"]
     email = user_info["user"]["email"]
-
-    create_user(username, auth_code, email)
+    auth_key = user_info["access_token"]
+    create_user(username, auth_key, email)
 
     session["username"] = username
     session["name"] = name
@@ -68,10 +69,10 @@ def logout():
     session.pop("username", '')
     session.pop("name", '')
     return redirect(url_for("index"))
-  
+
 def create_user(username, auth_key, email):
     sq = User.select().where(User.username == username)
-    if not sq.exists():  
+    if not sq.exists():
         user = User.create(
             username = username,
             auth_key = auth_key,
@@ -80,9 +81,9 @@ def create_user(username, auth_key, email):
         print "User created"
     print "User already exists"
 
-@app.errorhandler(Exception)
-def handle_exceptions(error):
-   return render_template("error.html"), 500
+# @app.errorhandler(Exception)
+# def handle_exceptions(error):
+#    return render_template("error.html"), 500
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
