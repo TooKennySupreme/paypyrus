@@ -36,7 +36,7 @@ def api_v1_get_picture():
     username = session["username"]
     if amount > 10:
         return "Currently, papyrus only supports amounts under $10. Sorry for the inconvenience."
-    bill_token = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(N))
+    bill_token = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(config.token_length))
 
    # process payment
     time = int(time.time())

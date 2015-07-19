@@ -13,3 +13,5 @@ venmo_client_secret = "xZ9gBxxrXRXMsMmX8EayEvms3HSskTGC"
 venmo_redirect_uri = ""
 venmo_endpoint = "https://api.venmo.com/v1/"
 venmo_auth_scope = "make_payments access_profile access_email access_friends"
+
+token_length = 20
