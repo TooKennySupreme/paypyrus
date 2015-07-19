@@ -2,6 +2,53 @@
 {% set thispage='login' %}
 {% block content %}
 <div class="user-page">
-    <h1>User Page</h1>
+    <h1>Hi, Amy Shu</h1>
+	<div class="row">
+		<div class="btn-col">
+			<a class="btn-large btn-monies">$1</a>
+			<a class="btn-large btn-monies">$5</a>
+			<a class="btn-large btn-monies">$10</a>
+		</div>
+	</div>
+	<div class="row">
+		<div class="btn-col">	
+			<div class="input-field col s4">
+	          <input id="quantity_1" type="number" class="validate">
+	          <label for="quantity_1">quantity</label>
+	        </div>
+	        <div class="input-field col s4">
+	          <input id="quantity_5" type="number" class="validate">
+	          <label for="quantity_5">quantity</label>
+	        </div>
+	        <div class="input-field col s4">
+	          <input id="quantity_10" type="number" class="validate">
+	          <label for="quantity_10">quantity</label>
+	        </div>
+        </div>
+    </div>
+    <button type="submit" id="submit-monies" class="btn-large">Submit</button>
 </div>
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript">
+	$('#submit-monies').click(function () {
+		$.ajax({
+			url: "/api/v1/get_bill",
+			data: {
+				quantity_1: $('#quantity_1').val(),
+				quantity_5: $('#quantity_5').val(),
+				quantity_10: $('#quantity_10').val()
+			},
+			method: 'POST',
+			error: function(xhr, status, error) {
+				console.log(xhr);
+				console.log(error);
+			},
+			success: function(data, status, xhr) {
+				console.log(data);
+			}
+		});
+	});
+</script>
 {% endblock %}
