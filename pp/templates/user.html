@@ -2,30 +2,30 @@
 {% set thispage='login' %}
 {% block content %}
 <div class="user-page">
-    <h1>Hi {{ full_name }},</h1>
+    <h1 style="margin-bottom: 75px;">Hi {{ full_name }},</h1>
 	<div class="row">
-		<div class="btn-col">
+		<div class="col s4 btn-col">
 			<a class="btn-large btn-monies green" id="btn-qty-1">$1</a>
-			<a class="btn-large btn-monies green" id="btn-qty-5">$5</a>
-			<a class="btn-large btn-monies green" id="btn-qty-10">$10</a>
-		</div>
-	</div>
-	<div class="row">
-		<div class="btn-col">
-			<div class="input-field col s4">
+			<div class="input-field">
 	          <input id="quantity_1" type="number" class="validate">
 	          <label for="quantity_1">quantity</label>
 	        </div>
-	        <div class="input-field col s4">
+		</div>
+		<div class="col s4 btn-col">
+			<a class="btn-large btn-monies green" id="btn-qty-5">$5</a>
+			<div class="input-field">
 	          <input id="quantity_5" type="number" class="validate">
 	          <label for="quantity_5">quantity</label>
 	        </div>
-	        <div class="input-field col s4">
+        </div>
+        <div class="col s4 btn-col">
+			<a class="btn-large btn-monies green" id="btn-qty-10">$10</a>
+			<div class="input-field">
 	          <input id="quantity_10" type="number" class="validate">
 	          <label for="quantity_10">quantity</label>
 	        </div>
         </div>
-    </div>
+	</div>
     <button type="submit" id="submit-monies" class="btn-large btn-submit green lighten-1">Submit</button>
     <div class="status green-text"></div>
 </div>
