@@ -3,21 +3,23 @@
 {% block content %}
 <div class="user-page">
     <h1 style="margin-bottom: 75px;">Hi {{ full_name }},</h1>
-	<table id="bill-table" class="striped">
+	<table id="bill-table" class="bordered black-text">
         <thead>
           <tr>
               <th data-field="amount">Amount</th>
               <th data-field="time">Time Created</th>
               <th data-field="redeemed">Redeemed</th>
+              <th data-field="redeemed">Time Redeemed</th>
           </tr>
         </thead>
 
         <tbody>
           {% for bill in bills %}			
           <tr>
-            <td>{{ bill.amount }}</td>
+            <td>{{ bill.amount | format_monies }}</td>
             <td>{{ bill.time | ctime }}</td>
-            <td>{{ bill.spent }}</td>
+            <td>{{ bill.spent }}</td> 
+            <td>{{ bill.time_redeemed | format_time }}</td>
           </tr>
           {% endfor %}
         </tbody>

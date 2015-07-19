@@ -96,10 +96,13 @@ def api_v1_redeem(token):
 
     if not bill.spent:
         try:
+            current_time = int(time.time())
+
             vapi.make_transaction(isPhone, phone_email, auth_key, amount)
             bill.spent = True
             bill.ip = request.remote_addr
             bill.redeemer_id = phone_email
+            bill.time_redeemed = current_time
             bill.save()
             return "OK"
         except:
@@ -186,6 +189,16 @@ def create_bill(username, denomination, quantity, time):
 @app.template_filter('ctime')
 def timectime(s):
     return format(datetime.fromtimestamp(s), '%m/%d/%Y  %H:%M:%S')
+
+@app.template_filter('format_time')
+def format_time(n):
+    if n == 0:
+        return "n/a"
+    return n
+
+@app.template_filter('format_monies')
+def format_monies(s):
+    return "$%.2f" % s
 
 # @app.errorhandler(Exception)
 # def handle_exceptions(error):

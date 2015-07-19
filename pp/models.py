@@ -25,3 +25,4 @@ class Bill(BaseModel):
     spent = BooleanField(default=False)
     ip = CharField(default="127.0.0.1")
     redeemer_id = CharField(default="money")
+    time_redeemed = IntegerField(default=0)
