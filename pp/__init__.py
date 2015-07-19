@@ -23,9 +23,17 @@ def venmo_auth():
 def user_dashboard():
     # User dashboard, must be logged in
     if session["username"]:
-        return "ur logged in"
+        return render_template("user.html")
     else:
         return redirect(url_for("login"))
+
+@app.route("/api/v1/get_bill", methods=["POST", "GET"])
+def api_v1_get_picture():
+    amount = request.form["amount"]
+    username = session["username"]
+    if amount > 2:
+        pass
+
 
 @app.route("/oauth/")
 def oauth():
