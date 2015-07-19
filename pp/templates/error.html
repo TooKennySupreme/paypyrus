@@ -1,0 +1,16 @@
+{% extends 'navbar.html' %}
+{% set thispage='login' %}
+{% block content %}
+<div class="centered">
+    <h1>Uh oh.</h1>
+    
+    <h4>An error occured.</h4>
+    <h5>
+    {% if error %}
+        {{ error | safe }}
+    {% else %}
+        Please try again later.
+    {% endif %}
+    </h5>
+</div>
+{% endblock %}
