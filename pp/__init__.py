@@ -1,4 +1,4 @@
-import time 
+import time
 from . import config
 from utils.venmo_util import VenmoAPI
 from flask import Flask
@@ -47,6 +47,11 @@ def api_v1_get_picture():
 
 # @app.route("/api/v1/redeem")
 
+@app.route("/api/v1/redeem")
+def api_v1_redeem():
+    pass
+>>>>>>> a9190dd885f235f805e6a4ea0d9eedb654dfd776
+
 @app.route("/oauth/")
 def oauth():
     error = request.args.get('error', '')
@@ -91,7 +96,6 @@ def create_user(username, auth_key, email):
         )
         print "User created"
     print "User already exists"
-
 
 def create_bill(username, denomination, quantity, time):
     user = User.select().where(User.username == username)
