@@ -63,6 +63,10 @@ def api_v1_get_picture():
     qr_urls = [qrcode.svgfilename(url) for url in urls]
     return ",".join(qr_urls)
 
+@app.route("/scan")
+def scan():
+    return render_template("qrscanner.html")
+
 @app.route("/redeem/<token>")
 def redeem(token):
     pass

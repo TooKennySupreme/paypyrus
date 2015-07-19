@@ -1,0 +1,20 @@
+{% extends 'navbar.html' %}
+{% set thispage='qrscanner' %}
+{% block content %}
+<div id="reader" class="cover grey darken-4"></div>
+    
+</div>
+{% endblock %}
+{% block script %}
+<script>
+$('#reader').html5_qrcode(function(data){
+        window.location = data;
+    },
+    function(error){
+        //show read errors 
+    }, function(videoError){
+        //the video stream could be opened
+    }
+);
+</script>
+{% endblock %}
