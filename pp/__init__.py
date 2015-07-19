@@ -31,9 +31,9 @@ def user_dashboard():
 def api_v1_get_picture():
     amount = request.form["amount"]
     username = session["username"]
-    if amount > 2:
-        pass
-
+    if amount > 10:
+        return "Currently, papyrus only supports amounts under $10. Sorry for the inconvenience."
+    # process payment
 
 @app.route("/oauth/")
 def oauth():
@@ -51,7 +51,6 @@ def oauth():
     except ValueError:
         return render_template("error.html", error="Unable to validate your account. Please try <a href='/logout'>logging out</a> and trying again.")
 
-
     session["username"] = user_info["user"]["username"]
     session["name"] = user_info["user"]["first_name"] + " " + user_info["user"]["last_name"]
     return redirect(url_for("user_dashboard"))
@@ -63,6 +62,9 @@ def logout():
     session.pop("name", '')
     return redirect(url_for("index"))
 
+@app.errorhandler(Exception)
+def handle_exceptions(error):
+   return render_template("error.html"), 500
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
