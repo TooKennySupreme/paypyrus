@@ -6,8 +6,8 @@ button::-moz-focus-inner {
 }
 
 body {
-  color: black;
-  /*color: #ccc;*/
+  /*color: black;*/
+  color: #ccc;
   font-family: 'Nixie One', sans-serif;
   font-weight: bold;
 }
@@ -55,7 +55,6 @@ nav {
 }
 
 .login-panel h1 {
-  margin-top: 72px;
   margin-bottom: 66px;
 }
 
