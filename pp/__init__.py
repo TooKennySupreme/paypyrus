@@ -6,7 +6,9 @@ from utils import qrcode
 from flask import Flask
 from flask import url_for, render_template, redirect, session, request
 from models import *
-import string, random
+import string, random, mimetype
+
+mimetypes.add_type('image/svg+xml', '.svg')
 
 app = Flask('pp')
 app.secret_key = config.secret_key
