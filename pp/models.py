@@ -20,3 +20,5 @@ class Bill(BaseModel):
     creator = CharField()
     # ForeignKeyField
     user = ForeignKeyField(User, related_name='bills')
+
+    bill_token = CharField(unique=True)

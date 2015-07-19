@@ -3,6 +3,8 @@ from . import config
 from utils.venmo_util import VenmoAPI
 from flask import Flask
 from flask import url_for, render_template, redirect, session, request
+from models import *
+import string, random
 
 app = Flask('pp')
 app.secret_key = config.secret_key
@@ -34,9 +36,15 @@ def api_v1_get_picture():
     username = session["username"]
     if amount > 10:
         return "Currently, papyrus only supports amounts under $10. Sorry for the inconvenience."
-    # process payment
+    bill_token = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(N))
+   
+   # process payment
     time = int(time.time())
-    create_bill(username, amount, time)
+    create_bill(username, amount, time, bill_token)
+    
+    return "OK"
+
+@app.route("/api/v1/redeem")
 
 @app.route("/oauth/")
 def oauth():
@@ -57,8 +65,8 @@ def oauth():
     username = user_info["user"]["username"]
     name = user_info["user"]["first_name"] + " " + user_info["user"]["last_name"]
     email = user_info["user"]["email"]
-
-    create_user(username, auth_code, email)
+    auth_key = user_info["access_token"]
+    create_user(username, auth_key, email)
 
     session["username"] = username
     session["name"] = name
@@ -71,11 +79,11 @@ def logout():
     session.pop("username", '')
     session.pop("name", '')
     return redirect(url_for("index"))
-  
+
 def create_user(username, auth_key, email):
     sq = User.select().where(User.username == username)
-    if not sq.exists():  
-        User.create(
+    if not sq.exists():
+        user = User.create(
             username = username,
             auth_key = auth_key,
             email = email
@@ -83,18 +91,19 @@ def create_user(username, auth_key, email):
         print "User created"
     print "User already exists"
 
-def create_bill(username, amount, time):
+def create_bill(username, amount, time, bill_token):
     user = User.select.where(User.username == username)
     Bill.create(
         user = user,
         creator = username,
         amount = amount, 
         time = time,
+        bill_token = bill_token,
     )
 
-@app.errorhandler(Exception)
-def handle_exceptions(error):
-   return render_template("error.html"), 500
+# @app.errorhandler(Exception)
+# def handle_exceptions(error):
+#    return render_template("error.html"), 500
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
