@@ -1,23 +1,35 @@
 import requests, urllib
-import config
+from .. import config
 
 class VenmoAPI:
-    def __init__(self, auth_code=None):
+    def __init__(self):
         self.venmo_endpoint = config.venmo_endpoint
         self.client_id = config.venmo_client_id
         self.client_secret = config.venmo_client_secret
         self.auth_scope = config.venmo_auth_scope
 
-        self.auth_code = auth_code
-
     def get_request_url(self, request_endpoint, request_args=None):
-        if request_args not None:
+        if request_args != None:
             args_encoded = urllib.urlencode(request_args)
         else:
             args_encoded = ""
 
-        request_endpoint = "{}{}{}".format(self.venmo_endpoint, request_endpoint, args_encoded)
+        request_endpoint = "{}{}?{}".format(self.venmo_endpoint, request_endpoint, args_encoded)
+        return request_endpoint
 
+    def make_api_request(self, code, args={}):
+        args_default = {
+            "client_id": self.client_id,
+            "client_secret": self.client_secret,
+            "code": code
+        }
+        request_endpoint = self.get_request_url("oauth/access_token")
+        args_default.update(args)
+        response = requests.post(request_endpoint, data=args_default)
+        return response
+
+    def get_user_data(self, code):
+        return self.make_api_request(code).json()
 
     def authorize(self):
         auth_args = {
@@ -25,4 +37,5 @@ class VenmoAPI:
             "client_secret": self.client_secret,
             "scope": self.auth_scope
         }
-        venmo_auth_endpoint = get_request_url("oauth/authorize", request_args=auth_args)
+        venmo_auth_endpoint = self.get_request_url("oauth/authorize", request_args=auth_args)
+        return venmo_auth_endpoint

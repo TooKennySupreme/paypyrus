@@ -6,9 +6,9 @@ dbpassword = "root"
 dbname = "paypyrus"
 
 # venmo API key
-venmo_client_id = ""
-venmo_client_secret = ""
+venmo_client_id = "2778"
+venmo_client_secret = "xZ9gBxxrXRXMsMmX8EayEvms3HSskTGC"
 
 venmo_redirect_uri = ""
-venmo_endpoint = "https://api.venmo.com/v1"
+venmo_endpoint = "https://api.venmo.com/v1/"
 venmo_auth_scope = "make_payments access_profile access_email access_friends"
