@@ -50,7 +50,6 @@ def api_v1_get_picture():
 @app.route("/api/v1/redeem")
 def api_v1_redeem():
     pass
->>>>>>> a9190dd885f235f805e6a4ea0d9eedb654dfd776
 
 @app.route("/oauth/")
 def oauth():
