@@ -137,11 +137,14 @@ def csv_bills(bills_list):
     bills_array = bills_list.split(",")
     return render_template("bills.html", bills_array=bills_array)
 
-@app.route("/api/v1/check_balance/<token>/")
+@app.route("/api/v1/check_balance/<token>/", methods=["GET", "POST"])
 def check_balance(token):
     bill = Bill.select().where(Bill.bill_token == token).first()
     amount = bill.amount
-    return amount
+    if bill.spent == True:
+        return "0.00"
+    else:
+        return str(amount)
 
 def create_user(username, auth_key, email):
     sq = User.select().where(User.username == username)

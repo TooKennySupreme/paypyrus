@@ -36,8 +36,11 @@ $(function () {
 			success: function(data, status, xhr) {
                 $(".status").removeClass("darken-3");
 				console.log(data);
-                if (data.length > 0) {
+                if (data == "OK") {
                     $(".status").html("Your money has been redeemed! You should see the funds show up in your Venmo account soon. <i class='material-icons'>payment</i>");
+                }
+                else {
+                    $(".status").html(data);
                 }
 			}
 		});
