@@ -55,6 +55,3 @@ def svgfilename(link):
         f.write(svg_document.tostring())
 
     return relative
-
-if __name__ == "__main__":
-    svgfilename("http://google.com")

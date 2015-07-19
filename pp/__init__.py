@@ -34,10 +34,16 @@ def user_dashboard():
 def create_redemption_url(bill_token):
     return "http://paypyrus.rcket.science/redeem/{}".format(bill_token)
 
+
 @app.route("/stats/")
 def stats():
     bills = Bill.select().where(Bill.creator == session["username"])
     return render_template("stats.html", full_name=session["name"], bills=bills)
+
+@app.route("/backs/<num>/")
+def backs(num):
+    num = int(num)
+    return render_template("backs.html", num=xrange(0, num))
 
 @app.route("/api/v1/get_bill", methods=["POST", "GET"])
 def api_v1_get_picture():
@@ -63,6 +69,10 @@ def api_v1_get_picture():
     print urls
     qr_urls = [qrcode.svgfilename(url) for url in urls]
     return ",".join(qr_urls)
+
+@app.route("/scan")
+def scan():
+    return render_template("qrscanner.html")
 
 @app.route("/redeem/<token>")
 def redeem(token):
