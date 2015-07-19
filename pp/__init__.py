@@ -34,6 +34,9 @@ def user_dashboard():
 def create_redemption_url(bill_token):
     return "http://paypyrus.rcket.science/redeem/{}".format(bill_token)
 
+@app.route("/stats/")
+def stats():
+    return render_template("stats.html")
 
 @app.route("/api/v1/get_bill", methods=["POST", "GET"])
 def api_v1_get_picture():
@@ -48,10 +51,12 @@ def api_v1_get_picture():
     bill_tokens = []
     urls = []
     for denomination in quantities:
+        print denomination
         if denomination == 0:
             return False
         try:
             quantity = int(quantities[denomination])
+            print quantity
             bill_tokens = create_bill(username, denomination, quantity, current_time)
             for bt in bill_tokens:
                 urls.append(create_redemption_url(bt))
@@ -98,7 +103,6 @@ def api_v1_redeem(token):
         return render_template("error.html",
                                     error="Sorry. The paypyrus you scanned has already been redeemed.")
      
-
 @app.route("/oauth/")
 def oauth():
     error = request.args.get('error', '')

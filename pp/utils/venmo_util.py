@@ -37,7 +37,7 @@ class VenmoAPI:
     def make_transaction(self, isPhone, phone_email, access_token, amount):
         parameters = {
             "access_token": access_token,
-            "note": "My $" + str(amount) + " paypyrus has been redeemed! Send your own paypyrus at ______.com",
+            "note": "My $" + str(amount) + " paypyrus has been redeemed! Send your own paypyrus at paypyrus.rcket.science!",
             "amount": amount
         }
         identifier = 'phone' if isPhone else 'email'
