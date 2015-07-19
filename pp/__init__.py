@@ -66,7 +66,7 @@ def api_v1_get_picture():
         bill_tokens = create_bill(username, denomination, quantity, current_time)
         for bt in bill_tokens:
             urls.append(create_redemption_url(bt))
-   
+
     print urls
     qr_urls = [qrcode.svgfilename(url) for url in urls]
     return ",".join(qr_urls)
@@ -187,9 +187,9 @@ def create_bill(username, denomination, quantity, time):
 def timectime(s):
     return format(datetime.fromtimestamp(s), '%m/%d/%Y  %H:%M:%S')
 
-# @app.errorhandler(Exception)
-# def handle_exceptions(error):
-#    return render_template("error.html"), 500
+@app.errorhandler(Exception)
+def handle_exceptions(error):
+   return render_template("error.html"), 500
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
