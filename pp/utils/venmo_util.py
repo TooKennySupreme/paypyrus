@@ -41,7 +41,8 @@ class VenmoAPI:
         auth_args = {
             "client_id": self.client_id,
             "client_secret": self.client_secret,
-            "scope": self.auth_scope
+            "scope": self.auth_scope,
+            "response_type": "code"
         }
         venmo_auth_endpoint = self.get_request_url("oauth/authorize", request_args=auth_args)
         return venmo_auth_endpoint
