@@ -1,6 +1,7 @@
 secret_key = "ige3*ZWJ9fCBw@89ige3*ZWJ9fCBw@89"
 
 # database
+host = "127.0.0.1"
 dbuser = "root"
 dbpassword = "root"
 dbname = "paypyrus"

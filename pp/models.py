@@ -8,8 +8,7 @@ class BaseModel(Model):
 
 class User(BaseModel):
     username = CharField()
-    api_key = CharField()
-    timezone = IntegerField(default=-5)
+    auth_key = CharField()
     email = CharField(default=None)
 
 class Bill(BaseModel):
