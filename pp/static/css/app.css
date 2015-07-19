@@ -70,6 +70,10 @@ nav {
   padding: 0px 130px;
 }
 
+.btn-submit {
+  float: right;
+}
+
 .centered {
   position: fixed;
   top: 40%;
@@ -98,8 +102,6 @@ nav {
 .venmo-btn:hover {
   background: rgba(061, 149, 206, .7);
 }
-
-
 
 video#bgvid {
   position: fixed;

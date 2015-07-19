@@ -33,19 +33,20 @@ def user_dashboard():
 @app.route("/api/v1/get_bill", methods=["POST", "GET"])
 def api_v1_get_picture():
     quantities = {
-        1: request.form["quantity_1"],
-        5: request.form["quantity_5"],
-        10: request.form["quantity_10"]
+        0.01: request.form["quantity_1"] or 0,
+        5: request.form["quantity_5"] or 0,
+        10: request.form["quantity_10"] or 0
     }
     username = session["username"]
 
     current_time = int(time.time())
     for denomination in quantities:
-        quantity = int(quantities[denomination])
-        create_bill(username, denomination, quantity, current_time)
+        try:
+            quantity = int(quantities[denomination])
+            create_bill(username, denomination, quantity, current_time)
+        except:
+            return "Invalid quantities"
     return "OK"
-
-# @app.route("/api/v1/redeem")
 
 @app.route("/api/v1/redeem")
 def api_v1_redeem():
