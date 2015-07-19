@@ -71,7 +71,7 @@ def redeem(token):
 
     return render_template("redeem.html", token=token)
 
-@app.route("/api/v1/redeem/<token>/")
+@app.route("/api/v1/redeem/<token>/", methods=["GET", "POST"])
 def api_v1_redeem(token):
     phone_email = request.form["phone_email"]
     isPhone = '@' not in phone_email
@@ -126,6 +126,12 @@ def csv_bills(bills_list):
     bills_array = bills_list.split(",")
     return render_template("bills.html", bills_array=bills_array)
 
+@app.route("/api/v1/check_balance/<token>/")
+def check_balance(token):
+    bill = Bill.select().where(Bill.bill_token == token)
+    amount = bill.amount
+    return amount
+
 def create_user(username, auth_key, email):
     sq = User.select().where(User.username == username)
     if not sq.exists():
@@ -141,7 +147,7 @@ def create_bill(username, denomination, quantity, time):
     user = User.select().where(User.username == username)
     btokens = []
     for i in range(quantity):
-        bill_token = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(100))
+        bill_token = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(75))
         btokens.append(bill_token)
         Bill.create(
             user = user,
