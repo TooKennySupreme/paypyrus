@@ -35,7 +35,7 @@ def user_dashboard():
         return redirect(url_for("login"))
 
 def create_redemption_url(bill_token):
-    return "http://paypyrus.rcket.science/redeem/{}".format(bill_token)
+    return "https://9522108a.ngrok.io/redeem/{}".format(bill_token)
 
 
 @app.route("/stats/")
