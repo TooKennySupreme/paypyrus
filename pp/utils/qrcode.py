@@ -15,7 +15,7 @@ def qrfilegen(link):
     correct = False
     while correct != True:
         relative = "qr-{}.svg".format(qrfilename)
-        gen_fn = "../static/svgs/{}".format(relative)
+        gen_fn = "pp/static/svgs/{}".format(relative)
         if os.path.isfile(gen_fn):
             continue
         else:
@@ -32,7 +32,7 @@ def qrfilegen(link):
     #return handle
 
 def svgfilename(link):
-    svg_document = svgwrite.Drawing(filename = "qrcodegen.svg", size = ("1000px", "1000px"))
+    svg_document = svgwrite.Drawing(filename = "qrcodegen.svg", size = ("400px", "400px"))
     svg_document.add(svg_document.image("paysign1.svg", insert = (0,0), size = ("35px", "35px")))
     svg_document.add(svg_document.image("paysign1.svg", insert = (0,200), size = ("35px", "35px")))
     svg_document.add(svg_document.image("paysign1.svg", insert = (300,0), size = ("35px", "35px")))
@@ -44,7 +44,8 @@ def svgfilename(link):
     correct = False
     while correct != True:
         qrfilename = get_str()
-        fn = "../static/svgs/final-{}.svg".format(qrfilename)
+        relative = "final-{}.svg".format(qrfilename)
+        fn = "pp/static/svgs/{}".format(relative)
         if os.path.isfile(fn):
             continue
         else:
@@ -53,7 +54,7 @@ def svgfilename(link):
     with open(fn, "w") as f:
         f.write(svg_document.tostring())
 
-    return fn
+    return relative
 
 if __name__ == "__main__":
     svgfilename("http://google.com")

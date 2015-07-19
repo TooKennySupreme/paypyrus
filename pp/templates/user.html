@@ -57,8 +57,8 @@
 			},
 			success: function(data, status, xhr) {
 				console.log(data);
-                if data.length "OK" {
-                    $(".status").html("Your bills have been created! <a href='/print/"+data+"'>Print</a>.");
+                if (data.length > 0) {
+                    $(".status").html("Your bills have been created! <a target='_blank' href='/print/"+data+"'>Print</a>.");
                 }
 			}
 		});
