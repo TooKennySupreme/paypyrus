@@ -3,6 +3,7 @@ from utils.venmo_util import VenmoAPI
 from flask import Flask
 from flask import url_for, render_template, redirect, session, request
 from models import *
+import string, random
 
 app = Flask('pp')
 app.secret_key = config.secret_key
@@ -34,7 +35,14 @@ def api_v1_get_picture():
     username = session["username"]
     if amount > 10:
         return "Currently, papyrus only supports amounts under $10. Sorry for the inconvenience."
-    # process payment
+    # process
+    bill_token = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(N))
+
+    return "OK"
+
+
+
+@app.route("/api/v1/redeem")
 
 @app.route("/oauth/")
 def oauth():
