@@ -31,9 +31,9 @@ def user_dashboard():
 def api_v1_get_picture():
     amount = request.form["amount"]
     username = session["username"]
-    if amount > 2:
-        pass
-
+    if amount > 10:
+        return "Currently, papyrus only supports amounts under $10. Sorry for the inconvenience."
+    # process payment
 
 @app.route("/oauth/")
 def oauth():
