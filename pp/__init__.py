@@ -59,6 +59,7 @@ def oauth():
 
     session["username"] = username
     session["name"] = name
+
     return redirect(url_for("user_dashboard"))
 
 @app.route("/logout/")
@@ -78,6 +79,10 @@ def create_user(username, auth_key, email):
         )
         print "User created"
     print "User already exists"
+
+@app.errorhandler(Exception)
+def handle_exceptions(error):
+   return render_template("error.html"), 500
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

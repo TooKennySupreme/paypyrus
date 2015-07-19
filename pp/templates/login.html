@@ -1,9 +1,18 @@
 {% extends 'navbar.html' %}
 {% set thispage='login' %}
 {% block content %}
-<div class="centered">
-    <h2>Login to Paypyrus</h2>
-    <a class="venmo-btn" href="/venmo_auth">Login with &nbsp;<img class='venmo-logo-img' src='/static/img/venmo-white.png' /></a>
-    <a href="#"><small>Need help?</small></a>
+<!-- <div class="centered"> -->
+<div class="cover grey darken-4"></div>
+
+<div class="panel splash-panel login-panel">
+    <h1>Login to<br><span class="brand-name-header green-text text-lighten-1">paypyrus</span></h1>
+    <div class="row">
+        <a class="btn venmo-btn col s6 offset-s3" href="/venmo_auth">
+            Login with &nbsp;<img class='venmo-logo-img' src='/static/img/venmo-white.png' />
+        </a>
+    </div>
+    <div class="row">
+        <a href="#">Need help?</a>
+    </div>
 </div>
 {% endblock %}
