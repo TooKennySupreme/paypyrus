@@ -60,7 +60,7 @@
         $(".status").html("<i class='material-icons'>flight_land</i> Loading your papyrus(es)...");
 
         $.ajax({
-            url: "/api/v1/get_bill",
+            url: "/api/v1/get_bill/",
             data: data,
             method: 'POST',
             error: function(xhr, status, error) {

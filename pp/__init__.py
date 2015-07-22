@@ -14,6 +14,9 @@ app = Flask('pp')
 app.secret_key = config.secret_key
 vapi = VenmoAPI()
 
+def must_be_logged_in():
+    return render_template("error.html", error="You must be logged in to view this page.")
+
 @app.route("/")
 def index():
     return render_template("home.html")
@@ -48,10 +51,49 @@ def backs(num):
     num = int(num)
     return render_template("backs.html", num=xrange(0, num))
 
-@app.route("/api/v1/get_bill", methods=["POST", "GET"])
+@app.route("/settings/")
+def settings():
+    if session.get("username") != None:
+        return render_template("settings.html")
+    else:
+        return must_be_logged_in()
+
+@app.route("/delete_account/")
+def delete_account():
+    username = session.get("username")
+    if username != None:
+        Bill.delete().where(Bill.creator == username).execute()
+        User.delete().where(User.username == username).execute()
+        logout_user()
+        return render_template("generic.html", message="""
+        Your account and all associated bills have been deleted. You may recreate
+         your account by simply logging back in.
+        """)
+    else:
+        return must_be_logged_in()
+
+@app.route("/api/v1/delete_bill/", methods=["GET", "POST"])
+def api_v1_delete_bill():
+    username = session["username"]
+    bill_token = request.form["bill_token"]
+    bill = Bill.select().where(Bill.bill_token == bill_token).first()
+    print bill
+    if bill.creator != username:
+        return "You cannot delete a bill you do not own!", 401
+    else:
+        Bill.delete().where(Bill.bill_token == bill_token).execute()
+        return "OK"
+
+
+@app.route("/api/v1/get_bill/", methods=["POST", "GET"])
 def api_v1_get_picture():
-    custom_amount = float(request.form["custom_amount"])
-    print custom_amount
+    custom_amount = request.form.get("custom_amount")
+    if custom_amount != None:
+        try:
+            custom_amount = float(custom_amount)
+        except:
+            return "Invalid custom amount. ", 400
+
     if custom_amount > 100:
         return "Sorry, but we do not currently allow denominations over $100.", 400
 
@@ -65,6 +107,9 @@ def api_v1_get_picture():
             1: request.form["quantity_5"] or 0,
             2: request.form["quantity_10"] or 0
         }
+
+        if sum([int(i) for i in quantities.values()]) > 50:
+            return "You may not create more than 50 bills at once.", 400
 
     username = session["username"]
 
@@ -152,11 +197,14 @@ def oauth():
 
     return redirect(url_for("user_dashboard"))
 
-@app.route("/logout/")
-def logout():
+def logout_user():
     session.pop("auth_code", '')
     session.pop("username", '')
     session.pop("name", '')
+
+@app.route("/logout/")
+def logout():
+    logout_user()
     return redirect(url_for("index"))
 
 @app.route("/print/<bills_list>")
