@@ -1,3 +1,5 @@
+import os
+
 secret_key = "ige3*ZWJ9fCBw@89ige3*ZWJ9fCBw@89"
 
 # database
@@ -15,3 +17,6 @@ venmo_endpoint = "https://api.venmo.com/v1/"
 venmo_auth_scope = "make_payments access_profile access_email access_friends"
 
 token_length = 20
+
+# This key must be 16, 24, or 32 bytes long
+crypto_key = os.environ.get("ENCRYPTION_KEY", '^CEqNJ0ce4*8Hh6IsQ15AHC3pVXdCkGK')

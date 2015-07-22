@@ -6,6 +6,7 @@ PyQRCode==1.1
 Werkzeug==0.10.4
 itsdangerous==0.24
 peewee==2.6.3
+pycrypto==2.6.1
 pyparsing==2.0.3
 requests==2.7.0
 svgwrite==1.1.6

@@ -2,7 +2,7 @@ import time
 from . import config
 from datetime import datetime
 from utils.venmo_util import VenmoAPI
-from utils import qrcode
+from utils import qrcode, encryption
 from flask import Flask
 from flask import url_for, render_template, redirect, session, request
 from models import *
@@ -94,7 +94,7 @@ def api_v1_redeem(token):
     user = bill.user
     amount = bill.amount
 
-    auth_key = user.auth_key
+    auth_key = encryption.decrypt_aes(user.auth_key)
 
     if not bill.spent:
         try:
@@ -131,8 +131,11 @@ def oauth():
     username = user_info["user"]["username"]
     name = user_info["user"]["first_name"] + " " + user_info["user"]["last_name"]
     email = user_info["user"]["email"]
+
     auth_key = user_info["access_token"]
-    create_user(username, auth_key, email)
+    encrypted_auth_key = encryption.encrypt_aes(auth_key)
+
+    create_user(username, encrypted_auth_key, email)
 
     session["username"] = username
     session["name"] = name
