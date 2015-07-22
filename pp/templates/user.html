@@ -1,32 +1,43 @@
 {% extends 'navbar.html' %}
-{% set thispage='login' %}
+{% set thispage='dashboard' %}
 {% block content %}
 <div class="user-page">
     <h1 style="margin-bottom: 75px;">Hi {{ full_name }},</h1>
 	<div class="row">
 		<div class="col s4 btn-col">
-			<a class="btn-large btn-monies green" id="btn-qty-1">$1</a>
+			<a class="btn-large btn-monies green" id="btn-qty-1">$0.01</a>
 			<div class="input-field">
 	          <input id="quantity_1" type="number" class="validate">
 	          <label for="quantity_1">quantity</label>
 	        </div>
 		</div>
 		<div class="col s4 btn-col">
-			<a class="btn-large btn-monies green" id="btn-qty-5">$5</a>
+			<a class="btn-large btn-monies green" id="btn-qty-5">$1</a>
 			<div class="input-field">
 	          <input id="quantity_5" type="number" class="validate">
 	          <label for="quantity_5">quantity</label>
 	        </div>
         </div>
         <div class="col s4 btn-col">
-			<a class="btn-large btn-monies green" id="btn-qty-10">$10</a>
+			<a class="btn-large btn-monies green" id="btn-qty-10">$2</a>
 			<div class="input-field">
 	          <input id="quantity_10" type="number" class="validate">
 	          <label for="quantity_10">quantity</label>
 	        </div>
         </div>
 	</div>
-    <button type="submit" id="submit-monies" class="btn-large btn-submit green lighten-1">Submit</button>
+    <div class="row">
+        <button type="submit" id="submit-monies" class="btn-large btn-submit green lighten-1">Submit</button>
+    </div>
+    <div class="row">
+        <div class="input-field">
+            <input id="amount-custom" type="number" class="validate">
+            <label for="amount-custom">custom bill amount in $</label>
+            <button type="submit" id="submit-custom-monies" class="btn-large btn-submit purple lighten-1">Create Custom Bill</button>
+        </div>
+
+    </div>
+
     <div class="grey-text">All bills will expire 60 days from creation.</div>
     <div class="status green-text"></div>
 </div>
@@ -43,31 +54,45 @@
 	$('#btn-qty-10').click(function () {
 		$('#quantity_10').focus();
 	});
-	$('#submit-monies').click(function () {
+
+    function create_payment(data) {
         $(".status").addClass("darken-3");
         $(".status").html("<i class='material-icons'>flight_land</i> Loading your papyrus(es)...");
 
-		$.ajax({
-			url: "/api/v1/get_bill",
-			data: {
-				quantity_1: $('#quantity_1').val(),
-				quantity_5: $('#quantity_5').val(),
-				quantity_10: $('#quantity_10').val()
-			},
-			method: 'POST',
-			error: function(xhr, status, error) {
-				console.log(xhr);
-				console.log(error);
-			},
-			success: function(data, status, xhr) {
+        $.ajax({
+            url: "/api/v1/get_bill",
+            data: data,
+            method: 'POST',
+            error: function(xhr, status, error) {
+                console.log(xhr);
+                console.log(error);
+                $(".status").html("Error: "+ xhr.responseText)
+            },
+            success: function(data, status, xhr) {
                 $(".status").removeClass("darken-3");
                 var backnum = data.split(",").length;
-				console.log(data);
+                console.log(data);
                 if (data.length > 0) {
                     $(".status").html("Your bills have been created! <a target='_blank' href='/print/"+data+"'>  Bills</a> <i class='material-icons'>local_printshop</i> <a target='_blank' href='/backs/"+backnum+"'>Backs</a>");
                 }
-			}
-		});
+            }
+        });
+    }
+
+    $("#submit-custom-monies").click(function () {
+        var data = {
+            custom_amount: $("#amount-custom").val()
+        }
+        create_payment(data);
+    });
+
+	$('#submit-monies').click(function () {
+        var data = {
+            quantity_1: $('#quantity_1').val(),
+            quantity_5: $('#quantity_5').val(),
+            quantity_10: $('#quantity_10').val()
+        }
+        create_payment(data);
 	});
 </script>
 {% endblock %}

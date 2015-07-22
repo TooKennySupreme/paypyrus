@@ -35,7 +35,7 @@ def user_dashboard():
         return redirect(url_for("login"))
 
 def create_redemption_url(bill_token):
-    return "https://9522108a.ngrok.io/redeem/{}".format(bill_token)
+    return "{}/redeem/{}".format(config.current_host, bill_token)
 
 
 @app.route("/stats/")
@@ -50,11 +50,22 @@ def backs(num):
 
 @app.route("/api/v1/get_bill", methods=["POST", "GET"])
 def api_v1_get_picture():
-    quantities = {
-        0.01: request.form["quantity_1"] or 0,
-        1: request.form["quantity_5"] or 0,
-        2: request.form["quantity_10"] or 0
-    }
+    custom_amount = float(request.form["custom_amount"])
+    print custom_amount
+    if custom_amount > 100:
+        return "Sorry, but we do not currently allow denominations over $100.", 400
+
+    if custom_amount:
+        quantities = {
+            custom_amount: 1
+        }
+    else:
+        quantities = {
+            0.01: request.form["quantity_1"] or 0,
+            1: request.form["quantity_5"] or 0,
+            2: request.form["quantity_10"] or 0
+        }
+
     username = session["username"]
 
     current_time = int(time.time())
@@ -69,7 +80,6 @@ def api_v1_get_picture():
         for bt in bill_tokens:
             urls.append(create_redemption_url(bt))
 
-    print urls
     qr_urls = [qrcode.svgfilename(url) for url in urls]
     return ",".join(qr_urls)
 

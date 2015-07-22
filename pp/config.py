@@ -8,13 +8,15 @@ dbuser = "root"
 dbpassword = "root"
 dbname = "paypyrus"
 
+current_host = "http://localhost:5000"
+
 # venmo API key
 venmo_client_id = "2778"
 venmo_client_secret = "xZ9gBxxrXRXMsMmX8EayEvms3HSskTGC"
 
 venmo_redirect_uri = ""
 venmo_endpoint = "https://api.venmo.com/v1/"
-venmo_auth_scope = "make_payments access_profile access_email access_friends"
+venmo_auth_scope = "make_payments access_profile access_email"
 
 token_length = 20
 

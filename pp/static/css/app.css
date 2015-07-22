@@ -65,6 +65,18 @@ nav {
   line-height: 55px;
 }
 
+.user-page {
+    padding-bottom: 100px;
+}
+
+#amount-custom {
+    width: 70%;
+}
+
+.status {
+    padding-top: 40px;
+}
+
 .login-panel h1 {
   margin-bottom: 66px;
 }
