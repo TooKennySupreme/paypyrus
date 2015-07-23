@@ -6,16 +6,18 @@ from utils import qrcode, encryption
 from flask import Flask
 from flask import url_for, render_template, redirect, session, request, Response
 from models import *
-import string, random, mimetypes
-
-mimetypes.add_type('image/svg+xml', '.svg')
+import string, random
+from flask_wtf.csrf import CsrfProtect, validate_csrf
 
 app = Flask('pp')
 app.secret_key = config.secret_key
 vapi = VenmoAPI()
+CsrfProtect(app)
 
 def must_be_logged_in():
     return render_template("error.html", error="You must be logged in to view this page.")
+def csrf_error():
+    return render_template("error.html", error="Invalid CSRF token. Did you mean to land on this page?")
 
 @app.route("/")
 def index():
@@ -72,6 +74,13 @@ def settings():
 
 @app.route("/delete_account/")
 def delete_account():
+    sent_csrf_token = request.args.get("csrf_token")
+    if sent_csrf_token != None:
+        sent_csrf_token = sent_csrf_token.replace("-", "#")
+
+    if not validate_csrf(sent_csrf_token):
+        return csrf_error()
+
     username = session.get("username")
     if username != None:
         Bill.delete().where(Bill.creator == username).execute()

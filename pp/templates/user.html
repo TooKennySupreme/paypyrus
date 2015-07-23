@@ -64,14 +64,11 @@
             data: data,
             method: 'POST',
             error: function(xhr, status, error) {
-                console.log(xhr);
-                console.log(error);
                 $(".status").html("Error: "+ xhr.responseText)
             },
             success: function(data, status, xhr) {
                 $(".status").removeClass("darken-3");
                 var backnum = data.split(",").length;
-                console.log(data);
                 if (data.length > 0) {
                     $(".status").html("Your bills have been created! <a target='_blank' href='/print/"+data+"'>  Bills</a> <i class='material-icons'>local_printshop</i> <a target='_blank' href='/backs/"+backnum+"'>Backs</a>");
                 }

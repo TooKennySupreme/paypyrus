@@ -10,6 +10,6 @@
        going into accounts->password and authorizations->paypyrus->revoke. We do not keep
        any user data after deletion.
    </p>
-    <a class="btn red" href="/delete_account/">Delete account</a>
+    <a class="btn red" href="/delete_account/?csrf_token={{ csrf_token() | replace('#', '-') }}">Delete account</a>
 </div>
 {% endblock %}

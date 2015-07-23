@@ -2,6 +2,8 @@
     <head>
         <title>Paypyrus</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
         <script src="/static/js/materialize.min.js"></script>
@@ -11,6 +13,17 @@
         <!-- <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyDUfH2rcZMI650GRtspHhpzmM5pVIYmkdw"></script> -->
 
     </head>
+    <script>
+        var csrftoken = $('meta[name=csrf-token]').attr('content');
+
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+    </script>
     <body>
         {% block body %}
         {% endblock %}
