@@ -278,6 +278,16 @@ if config.in_production == True:
         print error
         return render_template("error.html"), 500
 
+# Open & close db connections
+@app.before_request
+def _db_connect():
+    db.connect()
+
+@app.teardown_request
+def _db_close(exc):
+    if not db.is_closed():
+        db.close()
+
 @app.template_filter('format_time')
 def format_time(n):
     if n == 0:
