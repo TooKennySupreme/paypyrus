@@ -1,3 +1,15 @@
+<html>
+<head>
+    <style>
+        .bill {
+            width: 420px;
+            height: 320px;
+        }
+    </style>
+</head>
+<body scroll="no">
 {% for bill in bills_array %}
-<object data="/static/svgs/{{bill|e}}" type="image/svg+xml"></object>
+    <object class="bill" viewBox="0 0 400px 300px" data="/show_bill/{{bill|e}}" type="image/svg+xml"></object>
 {% endfor %}
+</body>
+</html>

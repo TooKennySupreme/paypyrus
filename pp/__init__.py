@@ -4,7 +4,7 @@ from datetime import datetime
 from utils.venmo_util import VenmoAPI
 from utils import qrcode, encryption
 from flask import Flask
-from flask import url_for, render_template, redirect, session, request
+from flask import url_for, render_template, redirect, session, request, Response
 from models import *
 import string, random, mimetypes
 
@@ -37,9 +37,21 @@ def user_dashboard():
     else:
         return redirect(url_for("login"))
 
-def create_redemption_url(bill_token):
-    return "{}/redeem/{}".format(config.current_host, bill_token)
+def create_bill_url(bill_token):
+    return "{}/show_bill/{}".format(config.current_host, bill_token)
 
+@app.route("/qr_svg/<token>/")
+def get_qr_svg(token):
+    try:
+        bill_svg = QRCode.select().where(QRCode.qr_token == token).first()
+        bill_svg_string = bill_svg.qr_code_string.decode("base64")
+        return Response(bill_svg_string, mimetype='image/svg+xml')
+    except:
+        return "404", 404
+
+@app.route("/show_bill/<token>/")
+def show_bill(token):
+    return render_template("show_bill.html", token=token)
 
 @app.route("/stats/")
 def stats():
@@ -63,6 +75,7 @@ def delete_account():
     username = session.get("username")
     if username != None:
         Bill.delete().where(Bill.creator == username).execute()
+        QRCode.delete().where(QRCode.creator == username).execute()
         User.delete().where(User.username == username).execute()
         logout_user()
         return render_template("generic.html", message="""
@@ -82,6 +95,7 @@ def api_v1_delete_bill():
         return "You cannot delete a bill you do not own!", 401
     else:
         Bill.delete().where(Bill.bill_token == bill_token).execute()
+        QRCode.delete().where(QRCode.qr_token == bill_token).execute()
         return "OK"
 
 
@@ -115,7 +129,7 @@ def api_v1_get_picture():
 
     current_time = int(time.time())
     bill_tokens = []
-    urls = []
+    toks = []
 
     for denomination in quantities:
         if denomination == 0:
@@ -123,10 +137,12 @@ def api_v1_get_picture():
         quantity = int(quantities[denomination])
         bill_tokens = create_bill(username, denomination, quantity, current_time)
         for bt in bill_tokens:
-            urls.append(create_redemption_url(bt))
+            toks.append(bt)
 
-    qr_urls = [qrcode.svgfilename(url) for url in urls]
-    return ",".join(qr_urls)
+    for tok in toks:
+        qrcode.qrfilegen(tok, session["username"])
+
+    return ",".join(toks)
 
 @app.route("/scan")
 def scan():
@@ -143,6 +159,7 @@ def redeem(token):
 @app.route("/api/v1/redeem/<token>/", methods=["GET", "POST"])
 def api_v1_redeem(token):
     phone_email = request.form["phone_email"]
+    reason = request.form.get("reason")
     isPhone = '@' not in phone_email
 
     bill = Bill.select().where(Bill.bill_token == token).first()
@@ -154,15 +171,17 @@ def api_v1_redeem(token):
     if not bill.spent:
         try:
             current_time = int(time.time())
+            if reason == "":
+                reason = None
 
-            vapi.make_transaction(isPhone, phone_email, auth_key, amount)
+            vapi.make_transaction(isPhone, phone_email, auth_key, amount, reason)
             bill.spent = True
             bill.ip = request.remote_addr
             bill.redeemer_id = phone_email
             bill.time_redeemed = current_time
             bill.save()
             return "OK"
-        except:
+        except Exception as e:
             return "Sorry. The phone number/email you entered is invalid."
     else:
         return "Sorry. The paypyrus you scanned has already been redeemed."
@@ -253,9 +272,11 @@ def create_bill(username, denomination, quantity, time):
 def timectime(s):
     return format(datetime.fromtimestamp(s), '%m/%d/%Y  %H:%M:%S')
 
-#@app.errorhandler(Exception)
-#def handle_exceptions(error):
-#   return render_template("error.html"), 500
+if config.in_production == True:
+    @app.errorhandler(Exception)
+    def handle_exceptions(error):
+        print error
+        return render_template("error.html"), 500
 
 @app.template_filter('format_time')
 def format_time(n):

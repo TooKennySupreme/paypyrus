@@ -5,8 +5,13 @@
     <h3>Redeem your paypyrus</h3>
     <p style="word-wrap: break-word;">Token ID {{ token | e }}</p>
     <div class="input-field venmofield">
+        <input type="text" id="reason" class="form" />
+        <label for="reason">payment note (optional)</label>
+    </div>
+
+    <div class="input-field venmofield nomargin">
         <input type="text" id="venmo-acct" class="form" />
-        <label for="venmo-acct">Venmo email or phone number</label>
+        <label for="venmo-acct">venmo email or phone number</label>
     </div>
     <a href="#" id="redeem-money" class="btn green">Redeem</a>
     <a href="#" id="check-balance" class="btn blue">Check Balance</a>
@@ -26,7 +31,8 @@ $(function () {
 		$.ajax({
             url: "/api/v1/redeem/{{ token | e }}/",
 			data: {
-				phone_email: $('#venmo-acct').val()
+				phone_email: $('#venmo-acct').val(),
+                reason: $("#reason").val()
 			},
 			method: 'POST',
 			error: function(xhr, status, error) {

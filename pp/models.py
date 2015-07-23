@@ -26,3 +26,11 @@ class Bill(BaseModel):
     ip = CharField(default="127.0.0.1")
     redeemer_id = CharField(default="money")
     time_redeemed = IntegerField(default=0)
+
+class QRCode(BaseModel):
+    # SVG, base64'ed
+    qr_code_string = TextField()
+    # Token of bill
+    qr_token = CharField(unique=True)
+    # creator
+    creator = CharField()

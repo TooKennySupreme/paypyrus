@@ -34,10 +34,13 @@ class VenmoAPI:
         except KeyError:
             return resjson
 
-    def make_transaction(self, isPhone, phone_email, access_token, amount):
+    def make_transaction(self, isPhone, phone_email, access_token, amount, reason=None):
+        if reason == None:
+            reason = "My $" + str(amount) + " paypyrus has been redeemed! Send your own paypyrus at paypyrus.org!"
+
         parameters = {
             "access_token": access_token,
-            "note": "My $" + str(amount) + " paypyrus has been redeemed! Send your own paypyrus at paypyrus.cydrobolt.com!",
+            "note": reason,
             "amount": amount
         }
         identifier = 'phone' if isPhone else 'email'

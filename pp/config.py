@@ -22,3 +22,4 @@ token_length = 20
 
 # This key must be 16, 24, or 32 bytes long
 crypto_key = os.environ.get("ENCRYPTION_KEY", '^CEqNJ0ce4*8Hh6IsQ15AHC3pVXdCkGK')
+in_production = bool(os.environ.get("IN_PRODUCTION", False))

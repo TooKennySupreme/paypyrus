@@ -15,7 +15,9 @@ button::-moz-focus-inner {
     margin-top: 50px;
     width: 340px;
 }
-
+.nomargin {
+    margin-top: 10px;
+}
 body {
   /*color: black;*/
   color: #ccc;
