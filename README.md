@@ -37,9 +37,9 @@ We use SVGs to generate the printable Paypyrus bills.
  - Run: `python runpp.py`
 
 ### Authors:
- - @amy-shu
- - @tsmanikandan
- - @rickyliang
- - @cydrobolt
+ - [@amy-shu](https://github.com/amy-shu)
+ - [@tsmanikandan](https://github.com/tsmanikandan)
+ - [@rickyliang](https://github.com/rickyliang)
+ - [@cydrobolt](https://github.com/cydrobolt)
 
 <!-- https://paypyrus.org -->
