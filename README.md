@@ -1,6 +1,7 @@
-[Paypyrus](http://i.imgur.com/ehb7opI.png)
+![Paypyrus](http://i.imgur.com/VcunvJc.png)
+### money, reimagined.
 
-## money, reimagined.
+[screenshots](http://imgur.com/a/4EEkX)
 
 ### Summary:
 
