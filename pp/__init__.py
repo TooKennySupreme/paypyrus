@@ -99,7 +99,6 @@ def api_v1_delete_bill():
     username = session["username"]
     bill_token = request.form["bill_token"]
     bill = Bill.select().where(Bill.bill_token == bill_token).first()
-    print bill
     if bill.creator != username:
         return "You cannot delete a bill you do not own!", 401
     else:
@@ -201,7 +200,7 @@ def oauth():
     auth_code = request.args.get('code', '')
     if error != '':
         return render_template("error.html",
-                                error="Sorry. It seems like something went wrong while authenticating your account. Try again later.")
+            error="Sorry. It seems like something went wrong while authenticating your account. Try again later.")
     else:
         session["auth_code"] = auth_code
 
@@ -209,7 +208,8 @@ def oauth():
     try:
         user_info = vapi.get_user_data(auth_code)
     except ValueError:
-        return render_template("error.html", error="Unable to validate your account. Please try <a href='/logout'>logging out</a> and trying again.")
+        return render_template("error.html",
+            error="Unable to validate your account. Please try <a href='/logout'>logging out</a> and trying again.")
 
     username = user_info["user"]["username"]
     name = user_info["user"]["first_name"] + " " + user_info["user"]["last_name"]
@@ -257,16 +257,16 @@ def create_user(username, auth_key, email):
             auth_key = auth_key,
             email = email
         )
-        print "User created"
-    print "User already exists"
 
 def create_bill(username, denomination, quantity, time):
-    print denomination
-    print quantity
     user = User.select().where(User.username == username)
     btokens = []
     for i in range(quantity):
-        bill_token = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(75))
+        bill_token = ''.join(
+            random.SystemRandom().choice(
+                string.ascii_uppercase + string.ascii_lowercase + string.digits
+            ) for _ in range(config.token_length)
+        )
         btokens.append(bill_token)
         Bill.create(
             user = user,
@@ -284,7 +284,6 @@ def timectime(s):
 if config.in_production == True:
     @app.errorhandler(Exception)
     def handle_exceptions(error):
-        print error
         return render_template("error.html"), 500
 
 # Open & close db connections
